@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="text" id="number1" />
+    <input type="text" id="operator" />
+    <input type="text" id="number2" />
+    <button id="btn">Rēķināt</button>
+    <p id="output"></p>
+
+    <script>
+      let number1Input = document.getElementById("number1");
+      let operatorInput = document.getElementById("operator");
+      let number2Input = document.getElementById("number2");
+      let btn = document.getElementById("btn");
+      // let output = document.getElementById("output");
+      let output = document.querySelector("#output");
+
+      btn.addEventListener("click", handleClick);
+
+      function handleClick() {
+        let number1 = parseFloat(number1Input.value);
+        let number2 = parseFloat(number2Input.value);
+        let operator = operatorInput.value;
+
+        //pārbauda lietotāja ievadi un atgriež kļūdu sarakstu
+        let errors = validateUserInput(number1, number2,operator);
+
+        let result = "";
+        if (errors.length == 0) {
+          //veic kalkulāciju
+          result = calc(number1, number2, operator);
+        } else {
+          //formatē kļūdas paziņojumu HTML formātā
+          result = formatErrorList(errors);
+        }
+
+        //attēlo rezultātu
+        displayResult(output, result);
+      }
+
+      function calc(number1, number2, operator) {
+        switch (operator) {
+          case "+":
+            return number1 + number2;
+          case "-":
+            return number1 - number2;
+          case "*":
+            return number1 * number2;
+          case "/":
+            return number1 / number2;
+
+          default:
+            return "Kļūdaina darbība";
+        }
+        output.innerHTML = result;
+      }
+
+      function displayResult(outputElement, outputValue) {
+        outputElement.innerHTML = outputValue;
+      }
+
+      function validateUserInput(number1, number2, operator) {
+        let errors = [];
+        if (isNaN(number1)){
+          //ielikt kļūdas paziņojumu masīvā
+          errors.push("Pirmais skaitlis nav ievadīts");
+        }
+        if (isNaN(number2)){
+          //ielikt kļūdas paziņojumu masīvā
+          errors.push("Otrais skaitlis nav ievadīts");
+        }
+        if (!["+", "-", "*", "/"].includes(operator)){
+          errors.push("Kļūdains operātors");
+        }
+        //operator ir iekšā šajā masīvā ["+", "-", "*", "/"]
+        // if (["+", "-", "*", "/"].includes(operator)){
+        //   console.log("operators pareizs")
+        // } else {
+        //   errors.push("Kļūdains operātors");
+        // }
+        
+      
+
+        // let errors = [
+        //   "Pirmais skaitlis nav ievadīts",
+        //   "Otrais skaitlis nav ievadīts",
+        //   "Kļūdains operātors",
+        // ];
+        // let errors=[];
+        return errors;
+      }
+
+      function formatErrorList(errorArray) {
+        let htmlList = "<ul>";
+        for (let i = 0; i < errorArray.length; i++) {
+          // result = result + `<li>${errorsArray[i]}</li>`;
+          htmlList += `<li>${errorArray[i]}</li>`;
+        }
+        htmlList += "</ul>";
+        return htmlList;
+      }
+    </script>
+  </body>
+</html>
